@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500652718319",
+    "project_id": "safe-sync-9e5ea",
+    "storage_bucket": "safe-sync-9e5ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500652718319:android:6f657c081bc13ea4cf431a",
+        "android_client_info": {
+          "package_name": "com.nimeshkadecha.safesync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAFtxXPi3ybTX-930IjagCgJsaqHGtqHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

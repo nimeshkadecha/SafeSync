@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.gallery.GalleryFragment">
+
+    <LinearLayout
+        android:id="@+id/NGO_Profile_Layout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/NGO_Email_Heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:text="Profile: - XYZ@gmail.com"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/baseline_person_pin_24"
+                app:layout_constraintEnd_toEndOf="@+id/NGO_Email_Heading"
+                app:layout_constraintStart_toStartOf="@+id/NGO_Email_Heading"
+                app:layout_constraintTop_toBottomOf="@+id/NGO_Email_Heading" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutName"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:hint="NGO Name"
+                app:counterMaxLength="70"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:startIconDrawable="@drawable/ic_baseline_drive_file_rename_outline_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/NGO_name"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="70"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout4"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Contact Number"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="#FF002E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName"
+                app:prefixText="+91"
+                app:startIconDrawable="@drawable/ic_phone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contactNumber"
+                    style="@style/TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textColorHint="#FA0202"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout11"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:hint="Area of Expertise"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="400"
+                app:endIconMode="clear_text"
+                app:helperText="Require*"
+                app:helperTextTextColor="#FF002E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+                app:startIconDrawable="@drawable/baseline_add_moderator_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/areaOfExpertise"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="400"
+                    android:textColorHint="#FA0202"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/Update_Ngo_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Profile"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout11" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Branch_Profile_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/NGO_Name_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="XYZ NGO"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/Branch_Email_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="abc@gmail.com"
+                android:layout_margin="10dp"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/NGO_Name_heading"
+                app:layout_constraintStart_toStartOf="@+id/NGO_Name_heading"
+                app:layout_constraintTop_toBottomOf="@+id/NGO_Name_heading" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutName_branch"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:hint="NGO Name"
+                app:counterMaxLength="70"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/NGO_Name_heading"
+                app:startIconDrawable="@drawable/ic_baseline_drive_file_rename_outline_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/Branch_name"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="70"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout4_b"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Contact Number"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="#FF002E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName_branch"
+                app:prefixText="+91"
+                app:startIconDrawable="@drawable/ic_phone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contactNumber_branch"
+                    style="@style/TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textColorHint="#FA0202"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout1111"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:hint="Services"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="400"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout4_b"
+                app:startIconDrawable="@drawable/baseline_assignment_ind_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/service_branch"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="400"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout111"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:hint="Area of Expertise"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="400"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout1111"
+                app:startIconDrawable="@drawable/baseline_add_moderator_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/areaOfExpertise_branch"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="400"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout12"
+                style="@style/TextInputLayout"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:hint="Equipment"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="400"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout111"
+                app:startIconDrawable="@drawable/baseline_warehouse_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/equipements"
+                    style="@style/TextInputEditText"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="400"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/Update_Branch_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Profile"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout12"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout12"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout12" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LoadingBlur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.3"
+        android:background="#000000"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/Ploding"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="2dp"
+        android:indeterminateDrawable="@drawable/progress_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

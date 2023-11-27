@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Base.Theme.SafeSync"
+    tools:context=".LoginScreen">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#193F73"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Welcome Back !"
+            android:textColor="#ffffff"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <!-- Your existing code goes here -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Account type"
+                android:textColor="#3C9A09"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/textView5"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+                <ImageButton
+                    android:id="@+id/NGO_Button"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:alpha="0.6"
+                    android:layout_margin="5dp"
+                    app:srcCompat="@drawable/ss_ngo" />
+
+                <ImageButton
+                    android:id="@+id/Branch_Button"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:alpha="0.6"
+                    android:layout_margin="5dp"
+                    app:srcCompat="@drawable/ss_branch" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inputLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:backgroundTint="#3c85f2"
+                    android:backgroundTintMode="add"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:gravity="center_vertical"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    style="@style/TextInputLayout"
+                    android:layout_width="310dp"
+                    android:layout_height="wrap_content"
+                    android:hint="NGO Email"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true"
+                    app:startIconDrawable="@drawable/ic_email">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/NOG_email"
+                        style="@style/TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_BranchID"
+                    style="@style/TextInputLayout"
+                    android:layout_width="310dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Branch Email"
+                    android:visibility="gone"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                    app:startIconDrawable="@drawable/ic_email">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/Branch_email"
+                        style="@style/TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    style="@style/TextInputLayout"
+                    android:layout_width="310dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    app:endIconMode="password_toggle"
+                    app:startIconDrawable="@drawable/ic_baseline_lock_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        style="@style/TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        tools:ignore="TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/login"
+                android:textSize="23dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/inputLinearLayout"
+                app:layout_constraintStart_toStartOf="@+id/inputLinearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/inputLinearLayout" />
+
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/textViewforgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Forgot_Password"
+                android:text="@string/forgot_password"
+                android:layout_marginEnd="20dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputLinearLayout"
+                tools:ignore="TouchTargetSizeCheck,UsingOnClickInXml" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/login"
+                app:layout_constraintStart_toStartOf="@+id/login"
+                app:layout_constraintTop_toBottomOf="@+id/login">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:text="New to"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:text="Safe Sync ?"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/SignUP_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:text="Sign Up"
+                    android:textColor="#569AFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:id="@+id/LoadingBlur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.3"
+        android:background="#000000"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/Ploding"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="20dp"
+        android:indeterminateDrawable="@drawable/progress_back"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
