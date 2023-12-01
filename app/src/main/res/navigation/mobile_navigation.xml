@@ -34,6 +34,14 @@
         android:name="com.nimeshkadecha.safesync.ui.details.NgoDetail"
         android:label="NgoDetails"
         tools:layout="@layout/fragment_ngo_detail" >
+        <action
+            android:id="@+id/action_to_BranchDetail"
+            app:destination="@id/BranchDetail" />
     </fragment>
+    <fragment
+        android:id="@+id/BranchDetail"
+        android:name="com.nimeshkadecha.safesync.ui.details.BranchDetails"
+        android:label="BranchDetails"
+        tools:layout="@layout/fragment_branch_details" />
 
 </navigation>

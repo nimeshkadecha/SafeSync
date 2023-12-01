@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHolder>{
+public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHolder> {
 
     ArrayList name;
     ArrayList Email;
@@ -25,7 +25,7 @@ public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHold
 
     Activity activity;
 
-    public branchAdapter(Context context,ArrayList Email, ArrayList name, Activity activity) {
+    public branchAdapter(Context context, ArrayList Email, ArrayList name, Activity activity) {
         this.context = context;
         this.Email = Email;
         this.name = name;
@@ -46,16 +46,15 @@ public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHold
         holder.NGO_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("NgoName", String.valueOf(name.get(position)));
+                bundle.putString("NgoEmail", String.valueOf(Email.get(position)));
+                Toast.makeText(context, "This is branch adapter", Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.BranchDetail,bundle);
 
-                Toast.makeText(context, "Clicked = "+name.get(position), Toast.LENGTH_SHORT).show();
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString("NgoName", String.valueOf(name.get(position)));
-//                bundle.putString("NgoEmail", String.valueOf(Email.get(position)));
-//
 //                NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
-//                navController.navigate(R.id.NgoDetail,bundle);
-
+//                navController.navigate(R.id.BranchDetail, bundle);
             }
         });
 

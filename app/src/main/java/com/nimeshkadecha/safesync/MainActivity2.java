@@ -10,7 +10,12 @@ import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.contactNumbe
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.equipements_edt;
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getAreaOfExpertise_edt;
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getContactNumber_EDT;
+import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getEqupmentAdapter;
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getNGO_name_edt;
+import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getNameArray;
+import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getQuentityArray;
+import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getQuentityEDT;
+import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.getRec;
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.service_branch_edt;
 import static com.nimeshkadecha.safesync.ui.home.HomeFragment.getAdapter;
 import static com.nimeshkadecha.safesync.ui.home.HomeFragment.getRecyclerView;
@@ -367,16 +372,33 @@ public class MainActivity2 extends AppCompatActivity {
         String experties;
         String Equpments;
 
-        TextInputEditText Branch_name_edt,contactNumber_branch_edt,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt;
+        String conradates;
+
+        String Address;
+
+        EqupmentAdapter adapter;
+
+        RecyclerView recyclerView;
+
+        ArrayList nameArr,quentityArr;
+
+        TextInputEditText Branch_name_edt,contactNumber_branch_edt,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt,Quentity;
 
         public GetBranchProfileDetails_Again(String Data) {
             this.data = Data;
 
+            nameArr = getNameArray();
+            quentityArr = getQuentityArray();
             Branch_name_edt = Branch_name_edt();
             contactNumber_branch_edt = contactNumber_branch_edt();
             service_branch_edt = service_branch_edt();
             areaOfExpertise_branch_edt = areaOfExpertise_branch_edt();
             equipements_edt = equipements_edt();
+            Quentity = getQuentityEDT();
+            adapter = getEqupmentAdapter();
+            recyclerView = getRec();
+            nameArr.clear();
+            quentityArr.clear();
 
         }
 
@@ -409,9 +431,22 @@ public class MainActivity2 extends AppCompatActivity {
                     name = dataObject.getString("bName");
                     contact = dataObject.getString("bContact");
                     experties = dataObject.getString("bExpertise");
-                    Equpments = dataObject.getString("bEquipements");
+
+                    JSONArray dataArray = dataObject.getJSONArray("bEquipements");
+
+                    // Iterate through the array to fetch nName values
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        JSONObject dataObject1 = dataArray.getJSONObject(i);
+
+                        Log.d("ENimesh","In array = "+dataObject1.getString("eqName"));
+
+                        // Get the current object in the array
+                        nameArr.add(dataObject1.getString("eqName"));
+                        quentityArr.add(dataObject1.getString("eqQuantity"));
+                    }
                     Services = dataObject.getString("bServices");
-                    //TODO: add services
+                    conradates = dataObject.getString("bCoordinates");
+                    Address = dataObject.getString("bAddress");
                 } else {
                     // Handle the case where 'status' field is not present in the JSON response
                     Log.e("ENimesh", "Status field not found in JSON response");
@@ -434,8 +469,13 @@ public class MainActivity2 extends AppCompatActivity {
                         Branch_name_edt.setText(name);
                         contactNumber_branch_edt.setText(contact);
                         areaOfExpertise_branch_edt.setText(experties);
-                        equipements_edt.setText(Equpments);
                         service_branch_edt.setText(Services);
+
+                        adapter = new EqupmentAdapter(MainActivity2.this,nameArr,quentityArr,equipements_edt,Quentity);
+                        recyclerView.setAdapter(adapter);
+
+                        adapter.notifyDataSetChanged();
+
 
                         Toast.makeText(MainActivity2.this, "Data field", Toast.LENGTH_SHORT).show();
                     } else {

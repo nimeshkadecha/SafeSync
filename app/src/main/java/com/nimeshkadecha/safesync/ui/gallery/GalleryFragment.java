@@ -20,8 +20,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.nimeshkadecha.safesync.EqupmentAdapter;
 import com.nimeshkadecha.safesync.LoginScreen;
 import com.nimeshkadecha.safesync.MyAdapter;
 import com.nimeshkadecha.safesync.R;
@@ -82,7 +85,7 @@ public class GalleryFragment extends Fragment {
     }
 
     TextView NGO_Name,BranchEmail;
-    static TextInputEditText Branch_name_edt,contactNumber_branch_edt,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt;
+    static TextInputEditText Branch_name_edt,contactNumber_branch_edt,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt,Quentity;
 
     public static TextInputEditText Branch_name_edt(){
         return Branch_name_edt;
@@ -96,6 +99,9 @@ public class GalleryFragment extends Fragment {
     public static TextInputEditText equipements_edt(){
         return equipements_edt;
     }
+    public static TextInputEditText getQuentityEDT(){
+        return Quentity;
+    }
     public static TextInputEditText service_branch_edt(){
         return service_branch_edt;
     }
@@ -103,6 +109,29 @@ public class GalleryFragment extends Fragment {
     String conradates;
     String Address;
     int pageLoadCounter = 0;
+
+    static RecyclerView recyclerView;
+    static EqupmentAdapter adapter;
+
+    public static RecyclerView getRec(){
+        return recyclerView;
+    }
+
+    public static EqupmentAdapter getEqupmentAdapter(){
+        return adapter;
+    }
+
+
+    static ArrayList quentity, name;
+
+    public static ArrayList getQuentityArray (){
+        return quentity;
+    }
+
+    public static ArrayList getNameArray(){
+        return name;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -122,9 +151,42 @@ public class GalleryFragment extends Fragment {
         PlodingView.setVisibility(View.GONE);
         LoadingBlur.setVisibility(View.GONE);
 
+        // branch -------------------------------
+        contactNumber_branch_edt = root.findViewById(R.id.contactNumber_branch);
+
+        service_branch_edt = root.findViewById(R.id.service_branch);
+
+        areaOfExpertise_branch_edt = root.findViewById(R.id.areaOfExpertise_branch);
+
+        Button update_branch = root.findViewById(R.id.Update_Branch_profile);
+
+        NGO_Name= root.findViewById(R.id.NGO_Name_heading);
+        NGO_Name.setText("NGO -"+NGO_Email_local);
+        BranchEmail= root.findViewById(R.id.Branch_Email_title);
+        Quentity= root.findViewById(R.id.Quentity);
+        equipements_edt= root.findViewById(R.id.EqName);
+
+        Branch_name_edt = root.findViewById(R.id.Branch_name);
+        BranchEmail.setText("Branch -"+Branch_Email_local);
+
+        recyclerView = root.findViewById(R.id.recyclerView_Eq);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // ngo-----------------------------
         TextView NGO_Email_Heading;
+
+        NGO_Email_Heading = root.findViewById(R.id.NGO_Email_Heading);
+        NGO_Email_Heading.setText(NGO_Email_local);
+
+        NGO_name_edt = root.findViewById(R.id.NGO_name);
+        contactNumber_edt = root.findViewById(R.id.contactNumber);
+        areaOfExpertise_edt = root.findViewById(R.id.areaOfExpertise);
+
+        Button Update_Ngo_profile = root.findViewById(R.id.Update_Ngo_profile);
+
         LinearLayout NGO_ProfileDetails = root.findViewById(R.id.NGO_Profile_Layout);
         LinearLayout Branch_ProfileDetails = root.findViewById(R.id.Branch_Profile_Layout);
+
+        // ---------------------------------------
         switch (user_type_local) {
             case "ngo":
                 if(pageLoadCounter == 0){
@@ -145,19 +207,8 @@ public class GalleryFragment extends Fragment {
                     }
                 }
 
-
                 NGO_ProfileDetails.setVisibility(View.VISIBLE);
                 Branch_ProfileDetails.setVisibility(View.GONE);
-
-                NGO_Email_Heading = root.findViewById(R.id.NGO_Email_Heading);
-                NGO_Email_Heading.setText(NGO_Email_local);
-
-                NGO_name_edt = root.findViewById(R.id.NGO_name);
-                contactNumber_edt = root.findViewById(R.id.contactNumber);
-                areaOfExpertise_edt = root.findViewById(R.id.areaOfExpertise);
-
-                Button Update_Ngo_profile = root.findViewById(R.id.Update_Ngo_profile);
-
                 Update_Ngo_profile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -228,22 +279,10 @@ public class GalleryFragment extends Fragment {
                 NGO_ProfileDetails.setVisibility(View.GONE);
                 Branch_ProfileDetails.setVisibility(View.VISIBLE);
 
-                NGO_Name= root.findViewById(R.id.NGO_Name_heading);
-                NGO_Name.setText("NGO -"+NGO_Email_local);
-                BranchEmail= root.findViewById(R.id.Branch_Email_title);
+                name = new ArrayList<>();
 
-                Branch_name_edt = root.findViewById(R.id.Branch_name);
-                BranchEmail.setText("Branch -"+Branch_Email_local);
+                quentity = new ArrayList<>();
 
-                contactNumber_branch_edt = root.findViewById(R.id.contactNumber_branch);
-
-                service_branch_edt = root.findViewById(R.id.service_branch);
-
-                areaOfExpertise_branch_edt = root.findViewById(R.id.areaOfExpertise_branch);
-
-                equipements_edt = root.findViewById(R.id.equipements);
-
-                Button update_branch = root.findViewById(R.id.Update_Branch_profile);
 
                 update_branch.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -259,11 +298,22 @@ public class GalleryFragment extends Fragment {
                                 postData.put("coordinates", conradates);
                                 postData.put("services", service_branch_edt.getText().toString());
                                 postData.put("expertise", areaOfExpertise_branch_edt.getText().toString());
-                                postData.put("equipements", equipements_edt.getText().toString());
+                                JSONArray equipmentArray = new JSONArray();
+
+                                // Assuming 'name' and 'quantity' have the same size
+                                for (int i = 0; i < name.size(); i++) {
+                                    JSONObject equipmentObject = new JSONObject();
+                                    equipmentObject.put("eqName", name.get(i));
+                                    equipmentObject.put("eqQuantity", quentity.get(i));
+                                    equipmentArray.put(equipmentObject);
+                                }
+
+                                postData.put("equipements", equipmentArray);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
+                            Log.d("ENimesh","Posting data : = "+postData);
                             PlodingView.setVisibility(View.VISIBLE);
                             LoadingBlur.setVisibility(View.VISIBLE);
                             new UpdateBranchDetails(String.valueOf(postData)).execute();
@@ -296,6 +346,27 @@ public class GalleryFragment extends Fragment {
                     }
                 });
 
+                Button addEq = root.findViewById(R.id.AddEqupment);
+
+                addEq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!equipements_edt.getText().toString().equals("") && !Quentity.getText().toString().equals("")){
+                            name.add(equipements_edt.getText().toString());
+                            quentity.add(Quentity.getText().toString());
+                            equipements_edt.setText("");
+                            Quentity.setText("");
+
+                            adapter = new EqupmentAdapter(getContext(),GalleryFragment.this.name,quentity,equipements_edt,Quentity);
+                            recyclerView.setAdapter(adapter);
+
+                        }else{
+                            Toast.makeText(getActivity(), "Fill Detail to add them", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
 
                 break;
 
@@ -307,6 +378,12 @@ public class GalleryFragment extends Fragment {
         return root;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     public class UpdateNgoDetails extends AsyncTask<Void, Void, Void> {
 
@@ -510,17 +587,20 @@ public class GalleryFragment extends Fragment {
     public class GetBranchProfileDetails extends AsyncTask<Void, Void, Void> {
 
         String status;
-
         String data;
-
         String name;
         String contact;
         String Services;
         String experties;
-        String Equpments;
 
         public GetBranchProfileDetails(String Data) {
             this.data = Data;
+            if(GalleryFragment.name != null){
+                GalleryFragment.name.clear();
+            }
+            if(quentity != null){
+                quentity.clear();
+            }
         }
 
 
@@ -552,10 +632,26 @@ public class GalleryFragment extends Fragment {
                     name = dataObject.getString("bName");
                     contact = dataObject.getString("bContact");
                     experties = dataObject.getString("bExpertise");
-                    Equpments = dataObject.getString("bEquipements");
+//                    Equpments = dataObject.getString("bEquipements");
+
+                    JSONArray dataArray = dataObject.getJSONArray("bEquipements");
+
+                    // Iterate through the array to fetch nName values
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        JSONObject dataObject1 = dataArray.getJSONObject(i);
+
+                        Log.d("ENimesh","In array = "+dataObject1.getString("eqName"));
+
+                        // Get the current object in the array
+                        GalleryFragment.this.name.add(dataObject1.getString("eqName"));
+                        quentity.add(dataObject1.getString("eqQuantity"));
+                    }
+
+
                     Services = dataObject.getString("bServices");
                     conradates = dataObject.getString("bCoordinates");
                     Address = dataObject.getString("bAddress");
+
                 } else {
                     // Handle the case where 'status' field is not present in the JSON response
                     Log.e("ENimesh", "Status field not found in JSON response");
@@ -580,8 +676,11 @@ public class GalleryFragment extends Fragment {
                         Branch_name_edt.setText(name);
                         contactNumber_branch_edt.setText(contact);
                         areaOfExpertise_branch_edt.setText(experties);
-                        equipements_edt.setText(Equpments);
                         service_branch_edt.setText(Services);
+
+                        adapter = new EqupmentAdapter(getContext(),GalleryFragment.this.name,quentity,equipements_edt,Quentity);
+                        recyclerView.setAdapter(adapter);
+
 
                         Toast.makeText(getActivity(), "Data field", Toast.LENGTH_SHORT).show();
                     } else {
