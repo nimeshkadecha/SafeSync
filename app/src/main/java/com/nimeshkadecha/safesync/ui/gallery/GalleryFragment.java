@@ -85,7 +85,7 @@ public class GalleryFragment extends Fragment {
     }
 
     TextView NGO_Name,BranchEmail;
-    static TextInputEditText Branch_name_edt,contactNumber_branch_edt,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt,Quentity;
+    static TextInputEditText Branch_name_edt,contactNumber_branch_edt,Address_EDT,service_branch_edt,areaOfExpertise_branch_edt,equipements_edt,Quentity;
 
     public static TextInputEditText Branch_name_edt(){
         return Branch_name_edt;
@@ -153,6 +153,7 @@ public class GalleryFragment extends Fragment {
 
         // branch -------------------------------
         contactNumber_branch_edt = root.findViewById(R.id.contactNumber_branch);
+        Address_EDT = root.findViewById(R.id.Address_EDT);
 
         service_branch_edt = root.findViewById(R.id.service_branch);
 
@@ -204,6 +205,7 @@ public class GalleryFragment extends Fragment {
                         PlodingView.setVisibility(View.VISIBLE);
                         LoadingBlur.setVisibility(View.VISIBLE);
                         new GetNgoProfileDetails(String.valueOf(postData)).execute();
+                        Log.d("SNimesh","Getting Profile details for NGO...");
                     }
                 }
 
@@ -237,6 +239,7 @@ public class GalleryFragment extends Fragment {
                                         PlodingView.setVisibility(View.VISIBLE);
                                         LoadingBlur.setVisibility(View.VISIBLE);
                                         new UpdateNgoDetails(String.valueOf(postData1)).execute();
+                                        Log.d("SNimesh","Updating Ngo details ...");
                                         
                                     } else {
                                         areaOfExpertise_edt.setError("List all Area of Expertise separated by (,) ");
@@ -273,6 +276,7 @@ public class GalleryFragment extends Fragment {
                         PlodingView.setVisibility(View.VISIBLE);
                         LoadingBlur.setVisibility(View.VISIBLE);
                         new GetBranchProfileDetails(String.valueOf(postData)).execute();
+                        Log.d("SNimesh","Getting branch details...");
                     }
                 }
 
@@ -283,7 +287,6 @@ public class GalleryFragment extends Fragment {
 
                 quentity = new ArrayList<>();
 
-
                 update_branch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -293,7 +296,7 @@ public class GalleryFragment extends Fragment {
                                 postData.put("bEmail", Branch_Email_local);
                                 postData.put("nEmail", NGO_Email_local);
                                 postData.put("name", Branch_name_edt.getText().toString());
-                                postData.put("address", Address);
+                                postData.put("address", Address_EDT.getText().toString());
                                 postData.put("contact", contactNumber_branch_edt.getText().toString());
                                 postData.put("coordinates", conradates);
                                 postData.put("services", service_branch_edt.getText().toString());
@@ -312,11 +315,11 @@ public class GalleryFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            Log.d("ENimesh","Posting data : = "+postData);
                             PlodingView.setVisibility(View.VISIBLE);
                             LoadingBlur.setVisibility(View.VISIBLE);
                             new UpdateBranchDetails(String.valueOf(postData)).execute();
+
+                            Log.d("SNimesh","Updating Branch details...");
 
 //                            if (valideEdittext(Branch_name_edt)) {
 //                                if (valideEdittext(contactNumber_branch_edt) && contactNumber_branch_edt.getText().toString().length() == 10) {
@@ -397,9 +400,6 @@ public class GalleryFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
-
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/UpdateNgo")
                     .post(RequestBody.create(JSON, data))
@@ -407,16 +407,13 @@ public class GalleryFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
-                Log.d("ENimesh", "Response: " + jsonData);
-                JSONObject jsonObject = new JSONObject(jsonData);
 
-                Log.d("ENimesh", "data = " + jsonData);
+                JSONObject jsonObject = new JSONObject(jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
 
                 } else {
-                    // Handle the case where 'status' field is not present in the JSON response
                     Log.e("ENimesh", "Status field not found in JSON response");
                 }
 
@@ -457,9 +454,7 @@ public class GalleryFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/UpdateBranch")
                     .post(RequestBody.create(JSON, data))
@@ -467,10 +462,8 @@ public class GalleryFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
-                Log.d("ENimesh", "Response: " + jsonData);
-                JSONObject jsonObject = new JSONObject(jsonData);
 
-                Log.d("ENimesh", "data = " + jsonData);
+                JSONObject jsonObject = new JSONObject(jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
@@ -506,7 +499,6 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-
     public class GetNgoProfileDetails extends AsyncTask<Void, Void, Void> {
 
         String status;
@@ -526,9 +518,7 @@ public class GalleryFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -537,8 +527,6 @@ public class GalleryFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh", "data = " + jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
@@ -551,7 +539,7 @@ public class GalleryFragment extends Fragment {
                     contact = dataObject.getString("nContact");
                     experties = dataObject.getString("nExpertise");
                 } else {
-                    // Handle the case where 'status' field is not present in the JSON response
+
                     Log.e("ENimesh", "Status field not found in JSON response");
                 }
 
@@ -608,9 +596,7 @@ public class GalleryFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -619,8 +605,6 @@ public class GalleryFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh", "data = " + jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
@@ -639,8 +623,6 @@ public class GalleryFragment extends Fragment {
                     // Iterate through the array to fetch nName values
                     for (int i = 0; i < dataArray.length(); i++) {
                         JSONObject dataObject1 = dataArray.getJSONObject(i);
-
-                        Log.d("ENimesh","In array = "+dataObject1.getString("eqName"));
 
                         // Get the current object in the array
                         GalleryFragment.this.name.add(dataObject1.getString("eqName"));
@@ -677,6 +659,7 @@ public class GalleryFragment extends Fragment {
                         contactNumber_branch_edt.setText(contact);
                         areaOfExpertise_branch_edt.setText(experties);
                         service_branch_edt.setText(Services);
+                        Address_EDT.setText(Address);
 
                         adapter = new EqupmentAdapter(getContext(),GalleryFragment.this.name,quentity,equipements_edt,Quentity);
                         recyclerView.setAdapter(adapter);

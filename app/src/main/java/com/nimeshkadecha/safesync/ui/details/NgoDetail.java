@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,14 +45,14 @@ public class NgoDetail extends Fragment {
 
 
     private FragmentNgoDetailBinding binding;
-    private ArrayList<String> Branch_Coordinates = new ArrayList<>();
+    private final ArrayList<String> Branch_Coordinates = new ArrayList<>();
     public ArrayList<String> Branch_Name;
-    private ArrayList<LatLng> markerPositions = new ArrayList<>();
-    public ArrayList<String> Branch_Email;
+    private final ArrayList<LatLng> markerPositions = new ArrayList<>();
+    public static ArrayList<String> Branch_Email;
     private GoogleMap googleMap;
     static MapView mapView;
 
-    public static MapView getMap(){
+    public static MapView getMap_NGO(){
         return mapView;
     }
 
@@ -66,6 +67,9 @@ public class NgoDetail extends Fragment {
     }
     static branchAdapter adapter;
 
+    private View PlodingView;
+    private LinearLayout LoadingBlur;
+
     public static branchAdapter getBranchAdapter(){
         return adapter;
     }
@@ -76,11 +80,7 @@ public class NgoDetail extends Fragment {
 
         NetworkInfo net = manager.getActiveNetworkInfo();
 
-        if (net == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return net != null;
     }
 //--------------------------------------------------------------------------------------------------
 public static final String SHARED_PREFS = "sharedPrefs";
@@ -89,8 +89,14 @@ public static final String SHARED_PREFS = "sharedPrefs";
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         binding = FragmentNgoDetailBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        PlodingView = root.findViewById(R.id.Ploding);
+        LoadingBlur = root.findViewById(R.id.LoadingBlur);
+        PlodingView.setVisibility(View.GONE);
+        LoadingBlur.setVisibility(View.GONE);
 
         Branch_Name = new ArrayList<>();
         Branch_Email = new ArrayList<>();
@@ -104,7 +110,6 @@ public static final String SHARED_PREFS = "sharedPrefs";
         heading.setText(NgoName);
 
         mapView = root.findViewById(R.id.mapView);
-
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this::onMapReady);
 
@@ -127,7 +132,12 @@ public static final String SHARED_PREFS = "sharedPrefs";
                 e.printStackTrace();
             }
 
+            PlodingView.setVisibility(View.VISIBLE);
+            LoadingBlur.setVisibility(View.VISIBLE);
+
             new get_Branch_List(String.valueOf(postData)).execute();
+
+            Log.d("SNimesh","Request for Branch List in NgoDetail page...");
         }
 
         return root;
@@ -150,9 +160,6 @@ public static final String SHARED_PREFS = "sharedPrefs";
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
-
-            Log.d("ENimesh","MY data = "+data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -161,8 +168,6 @@ public static final String SHARED_PREFS = "sharedPrefs";
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh","data = "+jsonData);
 
                 JSONArray dataArray = jsonObject.getJSONArray("data");
 
@@ -189,16 +194,20 @@ public static final String SHARED_PREFS = "sharedPrefs";
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-            adapter = new branchAdapter(getContext(),Branch_Email,Branch_Name, getActivity());
+            adapter = new branchAdapter(getContext(),Branch_Email,Branch_Name, getActivity(),NgoEmail);
             recyclerView.setAdapter(adapter);
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    PlodingView.setVisibility(View.GONE);
+                    LoadingBlur.setVisibility(View.GONE);
+
                     if (googleMap != null) {
                         // Iterate through the list of branch coordinates and add markers
                         for (int i = 0; i < Branch_Name.size(); i++) {
                             String branchName = Branch_Name.get(i);
+
                             double latitude = Double.parseDouble(Branch_Coordinates.get(i).split(",")[0]);
                             double longitude = Double.parseDouble(Branch_Coordinates.get(i).split(",")[1]);
 

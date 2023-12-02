@@ -5,10 +5,356 @@
     android:layout_height="match_parent"
     tools:context=".ui.details.BranchDetails">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".Schemes_Detail">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/headingCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:background="#1E3D59"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/Branch_Name_TV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="30dp"
+                                android:text="TextView"
+                                android:textColor="#FFFFFF"
+                                android:textSize="30sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/Ngo_Title_TV"
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#ffffff"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ngo contact"
+                                android:textSize="25sp" />
+
+                            <TextView
+                                android:id="@+id/NGO_Email_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:padding="16dp"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/benefitsCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#ffffff"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Branch Contact"
+                                android:textSize="25sp" />
+
+                            <TextView
+                                android:id="@+id/Branch_Email_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Some details about the schemes\nwhat is stored here"
+
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:paddingTop="16dp"
+                                android:textSize="16sp" />
+                            <TextView
+                                android:id="@+id/Branch_Contact_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Some details about the schemes\nwhat is stored here"
+                                android:padding="16dp"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/applicationProcessCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#FFFFFF"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Expertise"
+                                android:textSize="25sp"/>
+
+                            <TextView
+                                android:id="@+id/Expertise_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Some details about the schemes\nwhat is stored here"
+                                android:padding="16dp"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/requiredDocumentsCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#FFFFFF"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Services"
+                                android:textSize="25sp"/>
+
+                            <TextView
+
+                                android:id="@+id/Service_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Some details about the schemes\nwhat is stored here"
+                                android:padding="16dp"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/requiredDocumentsCardView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#FFFFFF"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Location"
+                                android:textSize="25sp"/>
+
+                            <com.google.android.gms.maps.MapView
+                                android:id="@+id/mapView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"/>
+                            <TextView
+                                android:id="@+id/Address_TV"
+                                android:textColor="#1E3D59"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Some Address about the schemes\nwhat is stored here"
+                                android:padding="16dp"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/requiredDocumentsCardView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="8dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+
+                                android:gravity="center_horizontal"
+                                android:background="#1E3D59"
+                                android:textColor="#FFFFFF"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Equpment List"
+                                android:textSize="25sp"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recDetails"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"/>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/LoadingBlur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.3"
+            android:background="#000000"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/Ploding"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:elevation="2dp"
+            android:indeterminateDrawable="@drawable/progress_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

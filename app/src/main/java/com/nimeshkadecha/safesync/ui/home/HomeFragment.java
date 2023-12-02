@@ -1,7 +1,10 @@
 package com.nimeshkadecha.safesync.ui.home;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -82,7 +85,14 @@ public class HomeFragment extends Fragment {
             return true;
         }
     }
-//--------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------------
+    String user_type_local;
+    String token_local;
+
+
+    public ArrayList<String> NGO_Name;
+    public ArrayList<String> NGO_Email;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -91,8 +101,55 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
-        String token_local = sharedPreferences.getString("token","");
-        String user_type_local = sharedPreferences.getString("user_type","");
+        token_local = sharedPreferences.getString("token", "");
+
+        user_type_local = sharedPreferences.getString("user_type", "");
+
+        if (!checkConnection()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setCancelable(false);
+            alert.setTitle("No Internet");
+            alert.setMessage("We kindly request you to verify your internet connectivity and attempt to reopen the application.");
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().finish();
+                }
+            });
+
+            alert.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (checkConnection()) {
+                        if (!token_local.equals("") && !user_type_local.equals("")) {
+                            dialog.dismiss();
+                            JSONObject postData = new JSONObject();
+                            try {
+                                postData.put("need", 1);
+                                postData.put("token", token_local);
+                                postData.put("userType", user_type_local);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (counter == 0) {
+
+                                PlodingView.setVisibility(View.VISIBLE);
+                                LoadingBlur.setVisibility(View.VISIBLE);
+                                new getAllData(String.valueOf(postData)).execute();
+                                counter++;
+                            } else {
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+                        alert.show();
+                    }
+                }
+            });
+
+            alert.show();
+        }
 
         recyclerView = root.findViewById(R.id.ngo_r_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -102,7 +159,7 @@ public class HomeFragment extends Fragment {
         PlodingView.setVisibility(View.GONE);
         LoadingBlur.setVisibility(View.GONE);
 
-        if(checkConnection()){
+        if (checkConnection()) {
             JSONObject postData = new JSONObject();
             try {
                 postData.put("need", 1);
@@ -111,13 +168,14 @@ public class HomeFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(counter == 0){
+            if (counter == 0) {
 
                 PlodingView.setVisibility(View.VISIBLE);
                 LoadingBlur.setVisibility(View.VISIBLE);
                 new getAllData(String.valueOf(postData)).execute();
+                Log.d("SNimesh","Request for NGO List...");
                 counter++;
-            }else{
+            } else {
                 recyclerView.setAdapter(adapter);
             }
         }
@@ -131,16 +189,114 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-    public class getAllData extends AsyncTask<Void,Void,Void> {
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!checkConnection()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setCancelable(false);
+            alert.setTitle("No Internet");
+            alert.setMessage("We kindly request you to verify your internet connectivity and attempt to reopen the application.");
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().finish();
+                }
+            });
+
+            alert.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (checkConnection()) {
+                        if (!token_local.equals("") && !user_type_local.equals("")) {
+                            dialog.dismiss();
+                            JSONObject postData = new JSONObject();
+                            try {
+                                postData.put("need", 1);
+                                postData.put("token", token_local);
+                                postData.put("userType", user_type_local);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (counter == 0) {
+
+                                PlodingView.setVisibility(View.VISIBLE);
+                                LoadingBlur.setVisibility(View.VISIBLE);
+                                new getAllData(String.valueOf(postData)).execute();
+                                counter++;
+                            } else {
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+                        alert.show();
+                    }
+                }
+            });
+
+            alert.show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!checkConnection()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setCancelable(false);
+            alert.setTitle("No Internet");
+            alert.setMessage("We kindly request you to verify your internet connectivity and attempt to reopen the application.");
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().finish();
+                }
+            });
+
+            alert.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (checkConnection()) {
+                        if (!token_local.equals("") && !user_type_local.equals("")) {
+                            dialog.dismiss();
+                            JSONObject postData = new JSONObject();
+                            try {
+                                postData.put("need", 1);
+                                postData.put("token", token_local);
+                                postData.put("userType", user_type_local);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if (counter == 0) {
+
+                                PlodingView.setVisibility(View.VISIBLE);
+                                LoadingBlur.setVisibility(View.VISIBLE);
+                                new getAllData(String.valueOf(postData)).execute();
+                                counter++;
+                            } else {
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+                        alert.show();
+                    }
+                }
+            });
+
+            alert.show();
+        }
+
+    }
+
+    public class getAllData extends AsyncTask<Void, Void, Void> {
 
         String status;
 
-        public ArrayList<String> NGO_Name;
-        public ArrayList<String> NGO_Email;
-
         String data;
 
-        RecyclerView recyclerView ;
+        RecyclerView recyclerView;
 
 
         public getAllData(String Data) {
@@ -158,30 +314,28 @@ public class HomeFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
-
-            Log.d("ENimesh","MY data = "+data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                String jsonData = response.body().string();
-                JSONObject jsonObject = new JSONObject(jsonData);
+                if (response.isSuccessful()) {
+                    String jsonData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonData);
 
-                Log.d("ENimesh","data = "+jsonData);
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
 
-                JSONArray dataArray = jsonObject.getJSONArray("data");
+                    // Iterate through the array to fetch nName values
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        // Get the current object in the array
+                        JSONObject dataObject = dataArray.getJSONObject(i);
+                        NGO_Name.add(dataObject.getString("nName"));
+                        NGO_Email.add(dataObject.getString("nEmail"));
+                    }
+                    status = jsonObject.getString("status");
 
-                // Iterate through the array to fetch nName values
-                for (int i = 0; i < dataArray.length(); i++) {
-                    // Get the current object in the array
-                    JSONObject dataObject = dataArray.getJSONObject(i);
-                    NGO_Name.add(dataObject.getString("nName"));
-                    NGO_Email.add(dataObject.getString("nEmail"));
                 }
-                status = jsonObject.getString("status");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -196,14 +350,14 @@ public class HomeFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(status.equals("200")){
-                        adapter = new MyAdapter(getContext(),NGO_Email,NGO_Name, getActivity());
+                    if (status.equals("200")) {
+                        adapter = new MyAdapter(getContext(), NGO_Email, NGO_Name, getActivity());
                         recyclerView.setAdapter(adapter);
                         PlodingView.setVisibility(View.GONE);
                         LoadingBlur.setVisibility(View.GONE);
-                    }else{
+                    } else {
 
-                        Toast.makeText(getActivity(), "Status = "+status, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Status = " + status, Toast.LENGTH_SHORT).show();
                     }
                 }
             });

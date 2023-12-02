@@ -1,7 +1,20 @@
 package com.nimeshkadecha.safesync;
 
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.branchDetailRecView;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.getCurrentBranchEmail;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.getCurrentNgoEmail;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.getEqAdapter;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_AddressTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_BranchContactTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_BranchEmailTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_BranchNameTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_ExpertiesTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_NGOEmailTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_NgoNameTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.get_ServicesTV;
+import static com.nimeshkadecha.safesync.ui.details.BranchDetails.mapViewBranch;
 import static com.nimeshkadecha.safesync.ui.details.NgoDetail.getBranchAdapter;
-import static com.nimeshkadecha.safesync.ui.details.NgoDetail.getMap;
+import static com.nimeshkadecha.safesync.ui.details.NgoDetail.getMap_NGO;
 import static com.nimeshkadecha.safesync.ui.details.NgoDetail.getNgoEmail;
 import static com.nimeshkadecha.safesync.ui.details.NgoDetail.getRecVIew;
 import static com.nimeshkadecha.safesync.ui.gallery.GalleryFragment.Branch_name_edt;
@@ -30,6 +43,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,6 +67,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.nimeshkadecha.safesync.databinding.ActivityMain2Binding;
+import com.nimeshkadecha.safesync.ui.details.BranchDetails;
 import com.nimeshkadecha.safesync.ui.details.NgoDetail;
 import com.nimeshkadecha.safesync.ui.gallery.GalleryFragment;
 import com.nimeshkadecha.safesync.ui.home.HomeFragment;
@@ -83,6 +98,7 @@ public class MainActivity2 extends AppCompatActivity {
     public ArrayList<String> Branch_Name = new ArrayList<>();
     private ArrayList<LatLng> markerPositions = new ArrayList<>();
     public ArrayList<String> Branch_Email = new ArrayList<>();
+    public String NgoEmails ;
     private GoogleMap googleMap;
     private MapView mapView ;
 //    ------------------------------------
@@ -123,6 +139,7 @@ public class MainActivity2 extends AppCompatActivity {
                     }
 
                     new getAllData_Again(String.valueOf(postData)).execute();
+                    Log.d("SNimesh","Refreshing All data in NGO LIST ...");
 
                 } else if (currentDestinationId == R.id.nav_gallery) {
                     if(user_type_local.equals("ngo")){
@@ -139,7 +156,10 @@ public class MainActivity2 extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         new GetNgoProfileDetails_Again(String.valueOf(postData)).execute();
+                        Log.d("SNimesh","Refreshing data about NGO in Profile...");
                     }else if(user_type_local.equals("branch")){
+                        binding.appBarMain.fab.setEnabled(false);
+                        Toast.makeText(MainActivity2.this, "Fetching Data ...", Toast.LENGTH_SHORT).show();
                         JSONObject postData = new JSONObject();
                         try {
                             postData.put("need", 4);
@@ -151,12 +171,15 @@ public class MainActivity2 extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         new GetBranchProfileDetails_Again(String.valueOf(postData)).execute();
+                        Log.d("SNimesh","Refreshing data about Branch in Profile...");
                     }else{
                         Toast.makeText(MainActivity2.this, "User Typr ERROR", Toast.LENGTH_SHORT).show();
                     }
 
 
                 } else if (currentDestinationId == R.id.NgoDetail) {
+                    binding.appBarMain.fab.setEnabled(false);
+                    Toast.makeText(MainActivity2.this, "Fetching Data ...", Toast.LENGTH_SHORT).show();
                     JSONObject postData = new JSONObject();
                     try {
                         postData.put("need", 2);
@@ -168,12 +191,31 @@ public class MainActivity2 extends AppCompatActivity {
                     }
 
                     new get_Branch_List_Again(String.valueOf(postData)).execute();
-                    mapView =getMap();
+                    Log.d("SNimesh","Refreshing data about NGO in NGO Detail...");
+                    mapView =getMap_NGO();
                     mapView.onCreate(savedInstanceState);
                     mapView.getMapAsync(MainActivity2.this::onMapReady);
 
-                } else if (currentDestinationId == R.id.nav_slideshow) {
-                    Toast.makeText(MainActivity2.this, "nav_slideshow", Toast.LENGTH_SHORT).show();
+                } else if (currentDestinationId == R.id.BranchDetail) {
+                    binding.appBarMain.fab.setEnabled(false);
+                    Toast.makeText(MainActivity2.this, "Fetching Data ...", Toast.LENGTH_SHORT).show();
+                    JSONObject postData = new JSONObject();
+                    try {
+                        postData.put("need", 4);
+                        postData.put("token", token_local);
+                        postData.put("userType", user_type_local);
+                        postData.put("nEmail", getCurrentNgoEmail());
+                        postData.put("bEmail", getCurrentBranchEmail());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    new get_Branch_Details_A(String.valueOf(postData)).execute();
+                    Log.d("SNimesh", "Getting branch details...");
+
+                    mapView =mapViewBranch();
+                    mapView.onCreate(savedInstanceState);
+                    mapView.getMapAsync(MainActivity2.this::onMapReady);
+
                 }
             }
         });
@@ -182,7 +224,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.LogOut,R.id.NgoDetail)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.LogOut,R.id.NgoDetail,R.id.BranchDetail)
                 .setOpenableLayout(drawer)
                 .build();
         
@@ -222,9 +264,7 @@ public class MainActivity2 extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh","MY data = "+data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -233,8 +273,6 @@ public class MainActivity2 extends AppCompatActivity {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh","data = "+jsonData);
 
                 JSONArray dataArray = jsonObject.getJSONArray("data");
 
@@ -302,9 +340,7 @@ public class MainActivity2 extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -313,8 +349,6 @@ public class MainActivity2 extends AppCompatActivity {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh", "data = " + jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
@@ -407,9 +441,7 @@ public class MainActivity2 extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh", "MY data = " + data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -418,8 +450,6 @@ public class MainActivity2 extends AppCompatActivity {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh", "data = " + jsonData);
 
                 if (jsonObject.has("status")) {
                     status = jsonObject.getString("status");
@@ -437,8 +467,6 @@ public class MainActivity2 extends AppCompatActivity {
                     // Iterate through the array to fetch nName values
                     for (int i = 0; i < dataArray.length(); i++) {
                         JSONObject dataObject1 = dataArray.getJSONObject(i);
-
-                        Log.d("ENimesh","In array = "+dataObject1.getString("eqName"));
 
                         // Get the current object in the array
                         nameArr.add(dataObject1.getString("eqName"));
@@ -465,6 +493,7 @@ public class MainActivity2 extends AppCompatActivity {
             MainActivity2.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    binding.appBarMain.fab.setEnabled(true);
                     if (status != null && status.equals("200")) {
                         Branch_name_edt.setText(name);
                         contactNumber_branch_edt.setText(contact);
@@ -516,9 +545,7 @@ public class MainActivity2 extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
-            Log.d("ENimesh","MY data = "+data);
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/isLoggedIn")
                     .post(RequestBody.create(JSON, data))
@@ -527,8 +554,6 @@ public class MainActivity2 extends AppCompatActivity {
                 Response response = client.newCall(request).execute();
                 String jsonData = response.body().string();
                 JSONObject jsonObject = new JSONObject(jsonData);
-
-                Log.d("ENimesh","data = "+jsonData);
 
                 JSONArray dataArray = jsonObject.getJSONArray("data");
 
@@ -555,12 +580,13 @@ public class MainActivity2 extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-            adapter = new branchAdapter(getApplicationContext(),Branch_Email,Branch_Name, MainActivity2.this);
+            adapter = new branchAdapter(getApplicationContext(),Branch_Email,Branch_Name, MainActivity2.this, getNgoEmail());
             recyclerView.setAdapter(adapter);
 
             MainActivity2.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    binding.appBarMain.fab.setEnabled(true);
                     if (googleMap != null) {
                         // Iterate through the list of branch coordinates and add markers
                         for (int i = 0; i < Branch_Name.size(); i++) {
@@ -682,4 +708,137 @@ public class MainActivity2 extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    public class get_Branch_Details_A extends AsyncTask<Void, Void, Void> {
+
+        String status;
+        String data;
+        String name;
+        String contact;
+        String Services;
+        String experties;
+        String Address;
+        String BranchEmail;
+
+        Equpment2Adapter adapterDetails;
+        RecyclerView recyclerView;
+
+        TextView BranchNameTV, ExpertiesTV, ServicesTV, NgoNameTV, NGOEmailTV, BranchContactTV, BranchEmailTV, AddressTV;
+
+        ArrayList <String> nameArrDetail = new ArrayList<>();
+        ArrayList <String> quentityArrDetail = new ArrayList<>();
+
+        public get_Branch_Details_A(String Data) {
+            this.data = Data;
+            BranchNameTV = get_BranchNameTV();
+            ExpertiesTV = get_ExpertiesTV();
+            ServicesTV = get_ServicesTV();
+            NgoNameTV = get_NgoNameTV();
+            NGOEmailTV = get_NGOEmailTV();
+            BranchContactTV = get_BranchContactTV();
+            BranchEmailTV = get_BranchEmailTV();
+            AddressTV = get_AddressTV();
+            adapterDetails = getEqAdapter();
+            recyclerView = branchDetailRecView();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url("https://safesync.onrender.com/isLoggedIn")
+                    .post(RequestBody.create(JSON, data))
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                String jsonData = response.body().string();
+                JSONObject jsonObject = new JSONObject(jsonData);
+
+                if (jsonObject.has("status")) {
+                    status = jsonObject.getString("status");
+
+                    // Access the 'data' object directly
+                    JSONObject dataObject = jsonObject.getJSONObject("data");
+
+                    // Retrieve values from the 'data' object
+                    name = dataObject.getString("bName");
+                    contact = dataObject.getString("bContact");
+                    experties = dataObject.getString("bExpertise");
+                    BranchEmail = dataObject.getString("bEmail");
+//                    Equpments = dataObject.getString("bEquipements");
+
+                    addMarkerFromJsonObject(dataObject);
+                    JSONArray dataArray = dataObject.getJSONArray("bEquipements");
+
+                    // Iterate through the array to fetch nName values
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        JSONObject dataObject1 = dataArray.getJSONObject(i);
+
+                        // Get the current object in the array
+                        nameArrDetail.add(dataObject1.getString("eqName"));
+                        quentityArrDetail.add(dataObject1.getString("eqQuantity"));
+                    }
+
+
+                    Services = dataObject.getString("bServices");
+                    Branch_Coordinates.add(dataObject.getString("bCoordinates"));
+                    Address = dataObject.getString("bAddress");
+
+                } else {
+                    // Handle the case where 'status' field is not present in the JSON response
+                    Log.e("ENimesh", "Status field not found in JSON response");
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            MainActivity2.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    binding.appBarMain.fab.setEnabled(true);
+                    if (status.equals("200")) {
+                        ServicesTV.setText(Services);
+                        ExpertiesTV.setText(experties);
+                        AddressTV.setText("Address :"+Address);
+                        BranchContactTV.setText("Contact Number :"+contact);
+                        BranchEmailTV.setText("Email :"+BranchEmail);
+
+                        adapterDetails = new Equpment2Adapter(getApplicationContext(),nameArrDetail,quentityArrDetail);
+                        recyclerView.setAdapter(adapterDetails);
+                        adapterDetails.notifyDataSetChanged();
+
+                    } else {
+                        Toast.makeText(MainActivity2.this, "Server Message :" + status, Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (googleMap != null) {
+                        // Iterate through the list of branch coordinates and add markers
+                        for (int i = 0; i < Branch_Name.size(); i++) {
+                            String branchName = Branch_Name.get(i);
+                            double latitude = Double.parseDouble(Branch_Coordinates.get(i).split(",")[0]);
+                            double longitude = Double.parseDouble(Branch_Coordinates.get(i).split(",")[1]);
+
+                            addMarkerToMap(branchName, latitude, longitude);
+                        }
+
+                        // Zoom to fit all markers on the map
+                        zoomToFitMarkers();
+                    }
+                }
+            });
+
+        }
+    }
+
+
+
 }

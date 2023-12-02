@@ -123,6 +123,7 @@ public class LoginScreen extends AppCompatActivity {
 
         if(checkConnection()){
             new Start_Server().execute();
+            Log.d("SNimesh","Request for Server start...");
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -270,7 +271,6 @@ public class LoginScreen extends AppCompatActivity {
 
                             Login_Btn.setEnabled(false);
 
-                            Log.d("ENimesh", "Start to hit");
 
                             JSONObject postData = new JSONObject();
                             try {
@@ -279,8 +279,8 @@ public class LoginScreen extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.d("ENimesh", "DATA = " + String.valueOf(postData));
                             new NGO_Login(String.valueOf(postData),NGO_email_EDT.getText().toString()).execute();
+                            Log.d("SNimesh","Request for NGO Login...");
                         }
                     } else if (UserType[0].equals("branch")) {
                         if (!EmailValidation(NGO_email_EDT.getText().toString())) {
@@ -298,8 +298,6 @@ public class LoginScreen extends AppCompatActivity {
                             LoadingBlur.setVisibility(View.VISIBLE);
                             Login_Btn.setEnabled(false);
 
-                            Log.d("ENimesh", "Start to hit");
-
                             JSONObject postData = new JSONObject();
                             try {
                                 postData.put("nEmail", NGO_email_EDT.getText().toString());
@@ -308,8 +306,8 @@ public class LoginScreen extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.d("ENimesh", "DATA = " + String.valueOf(postData));
                             new Branch_Login(String.valueOf(postData)).execute();
+                            Log.d("SNimesh","Request for Branch Login...");
                         }
                     }
 
@@ -322,7 +320,7 @@ public class LoginScreen extends AppCompatActivity {
 
     }
 
-    public static class Start_Server extends AsyncTask<Void,Void,Void>{
+    public class Start_Server extends AsyncTask<Void,Void,Void>{
 
 
         String login_status = "null";
@@ -331,7 +329,6 @@ public class LoginScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
                 final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 OkHttpClient client = new OkHttpClient();
-                Log.d("ENimesh", "Trying");
 
                 Request request = new Request.Builder()
                         .url("https://safesync.onrender.com/isloggedin")
@@ -339,12 +336,13 @@ public class LoginScreen extends AppCompatActivity {
                         .build();
                 try {
                     Response response = client.newCall(request).execute();
-                    String jsonData = response.body().string();
-                    JSONObject jsonObject = new JSONObject(jsonData);
+                    if(response.isSuccessful()){
+                        String jsonData = response.body().string();
+                        JSONObject jsonObject = new JSONObject(jsonData);
 
-                    login_status = jsonObject.getString("status");
+                        login_status = jsonObject.getString("status");
 
-                    Log.d("ENimesh", "Starting Server = " + jsonObject.getString("status"));
+                    }
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -371,7 +369,6 @@ public class LoginScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/ngoLogin")
@@ -379,15 +376,16 @@ public class LoginScreen extends AppCompatActivity {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                String jsonData = response.body().string();
-                JSONObject jsonObject = new JSONObject(jsonData);
+                if(response.isSuccessful()){
+                    String jsonData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonData);
 
-                login_status = jsonObject.getString("status");
-                if(login_status.equals("202")){
-                    token = jsonObject.getString("token");
+                    login_status = jsonObject.getString("status");
+                    if(login_status.equals("202")){
+                        token = jsonObject.getString("token");
+                    }
+
                 }
-
-                Log.d("ENimesh", "status message from API = " + jsonObject.getString("status"));
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -461,7 +459,6 @@ public class LoginScreen extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            Log.d("ENimesh", "Trying");
 
             Request request = new Request.Builder()
                     .url("https://safesync.onrender.com/bLogin")
@@ -469,15 +466,15 @@ public class LoginScreen extends AppCompatActivity {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                String jsonData = response.body().string();
-                JSONObject jsonObject = new JSONObject(jsonData);
+                if(response.isSuccessful()){
+                    String jsonData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonData);
 
-                login_status = jsonObject.getString("status");
-                if(login_status.equals("202")){
-                    token = jsonObject.getString("token");
+                    login_status = jsonObject.getString("status");
+                    if(login_status.equals("202")){
+                        token = jsonObject.getString("token");
+                    }
                 }
-
-                Log.d("ENimesh", "status message from API = " + jsonObject.getString("status"));
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -548,23 +545,23 @@ public class LoginScreen extends AppCompatActivity {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                String jsonData = response.body().string();
-                JSONObject jsonObject = new JSONObject(jsonData);
+                if(response.isSuccessful()){
 
-                Log.d("ENimesh","data = "+jsonData);
+                    String jsonData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonData);
 
-                JSONArray dataArray = jsonObject.getJSONArray("data");
 
-                // Iterate through the array to fetch nName values
-                for (int i = 0; i < dataArray.length(); i++) {
-                    // Get the current object in the array
-                    JSONObject dataObject = dataArray.getJSONObject(i);
-                    NGO_Name_arr.add(dataObject.getString("nName"));
-                    NGO_Email_arr.add(dataObject.getString("nEmail"));
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
+
+                    // Iterate through the array to fetch nName values
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        // Get the current object in the array
+                        JSONObject dataObject = dataArray.getJSONObject(i);
+                        NGO_Name_arr.add(dataObject.getString("nName"));
+                        NGO_Email_arr.add(dataObject.getString("nEmail"));
+                    }
+                    status = jsonObject.getString("status");
                 }
-                status = jsonObject.getString("status");
-
-                Log.d("ENimesh", "Starting Server = " + jsonObject.getString("status"));
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();

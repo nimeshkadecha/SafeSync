@@ -22,13 +22,14 @@ public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHold
     ArrayList name;
     ArrayList Email;
     Context context;
-
     Activity activity;
+    String N_Email;
 
-    public branchAdapter(Context context, ArrayList Email, ArrayList name, Activity activity) {
+    public branchAdapter(Context context, ArrayList Email, ArrayList name, Activity activity,String  N_Email) {
         this.context = context;
         this.Email = Email;
         this.name = name;
+        this.N_Email = N_Email;
         this.activity = activity;
     }
 
@@ -47,14 +48,12 @@ public class branchAdapter extends RecyclerView.Adapter<branchAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("NgoName", String.valueOf(name.get(position)));
-                bundle.putString("NgoEmail", String.valueOf(Email.get(position)));
-                Toast.makeText(context, "This is branch adapter", Toast.LENGTH_SHORT).show();
+                bundle.putString("BranchName", String.valueOf(name.get(position)));
+                bundle.putString("BranchEmail", String.valueOf(Email.get(position)));
+                bundle.putString("NgoEmail", N_Email);
+
                 NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.BranchDetail,bundle);
-
-//                NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
-//                navController.navigate(R.id.BranchDetail, bundle);
             }
         });
 

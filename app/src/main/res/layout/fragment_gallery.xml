@@ -228,13 +228,37 @@
                         android:layout_width="380dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Services"
+                        android:hint="Address"
                         app:counterEnabled="true"
                         app:counterMaxLength="400"
                         app:endIconMode="clear_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4_b"
+                        app:startIconDrawable="@drawable/ic_baseline_home_work_24">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/Address_EDT"
+                            style="@style/TextInputEditText"
+                            android:layout_width="380dp"
+                            android:layout_height="wrap_content"
+                            android:maxLength="400"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout1112"
+                        style="@style/TextInputLayout"
+                        android:layout_width="380dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="Services"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="400"
+                        app:endIconMode="clear_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout1111"
                         app:startIconDrawable="@drawable/baseline_assignment_ind_24">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -258,7 +282,7 @@
                         app:endIconMode="clear_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout1111"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout1112"
                         app:startIconDrawable="@drawable/baseline_add_moderator_24">
 
                         <com.google.android.material.textfield.TextInputEditText
