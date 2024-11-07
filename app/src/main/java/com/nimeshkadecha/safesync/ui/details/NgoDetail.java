@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -83,7 +84,7 @@ public class NgoDetail extends Fragment {
         return net != null;
     }
 //--------------------------------------------------------------------------------------------------
-public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SHARED_PREFS = "sharedPrefs";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -263,13 +264,10 @@ public static final String SHARED_PREFS = "sharedPrefs";
         }
     }
     public void addMarkerToMap(String title, double latitude, double longitude) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (googleMap != null) {
-                    LatLng location = new LatLng(latitude, longitude);
-                    googleMap.addMarker(new MarkerOptions().position(location).title(title));
-                }
+        requireActivity().runOnUiThread(() -> {
+            if (googleMap != null) {
+                LatLng location = new LatLng(latitude, longitude);
+                googleMap.addMarker(new MarkerOptions().position(location).title(title));
             }
         });
 

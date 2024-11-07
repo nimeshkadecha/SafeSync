@@ -298,6 +298,8 @@ public class HomeFragment extends Fragment {
 
         RecyclerView recyclerView;
 
+        boolean serverIsOn = false;
+
 
         public getAllData(String Data) {
             this.data = Data;
@@ -321,6 +323,7 @@ public class HomeFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
+                    serverIsOn = true;
                     String jsonData = response.body().string();
                     JSONObject jsonObject = new JSONObject(jsonData);
 
@@ -347,18 +350,17 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (status.equals("200")) {
-                        adapter = new MyAdapter(getContext(), NGO_Email, NGO_Name, getActivity());
-                        recyclerView.setAdapter(adapter);
-                        PlodingView.setVisibility(View.GONE);
-                        LoadingBlur.setVisibility(View.GONE);
-                    } else {
+            if(!serverIsOn) return;
 
-                        Toast.makeText(getActivity(), "Status = " + status, Toast.LENGTH_SHORT).show();
-                    }
+            getActivity().runOnUiThread(() -> {
+                if (status.equals("200")) {
+                    adapter = new MyAdapter(getContext(), NGO_Email, NGO_Name, getActivity());
+                    recyclerView.setAdapter(adapter);
+                    PlodingView.setVisibility(View.GONE);
+                    LoadingBlur.setVisibility(View.GONE);
+                } else {
+
+                    Toast.makeText(getActivity(), "Status = " + status, Toast.LENGTH_SHORT).show();
                 }
             });
 

@@ -1,5 +1,6 @@
 package com.nimeshkadecha.safesync;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -137,32 +138,20 @@ public class LoginScreen extends AppCompatActivity {
                 startActivity(gotoHome);
             }
         }else{
-            AlertDialog.Builder alert = new AlertDialog.Builder(LoginScreen.this);
-            alert.setCancelable(false);
-            alert.setTitle("No Internet");
-            alert.setMessage("We kindly request you to verify your internet connectivity and attempt to reopen the application.");
-            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finishAffinity();
-                }
-            });
+            AlertDialog.Builder alert = getBuilder();
 
-            alert.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(checkConnection()){
-                        if(!token_local.equals("") && !user_type_local.equals("")){
+            alert.setNegativeButton("Retry", (dialog, which) -> {
+                if(checkConnection()){
+                    if(!token_local.isEmpty() && !user_type_local.isEmpty()){
 
-                            new Start_Server().execute();
+                        new Start_Server().execute();
 
-                            Intent gotoHome = new Intent(LoginScreen.this,MainActivity2.class);
-                            startActivity(gotoHome);
-                        }
-                    }else{
-                        Toast.makeText(LoginScreen.this, "No Internet", Toast.LENGTH_SHORT).show();
-                        alert.show();
+                        Intent gotoHome = new Intent(LoginScreen.this,MainActivity2.class);
+                        startActivity(gotoHome);
                     }
+                }else{
+                    Toast.makeText(LoginScreen.this, "No Internet", Toast.LENGTH_SHORT).show();
+                    alert.show();
                 }
             });
 
@@ -195,49 +184,45 @@ public class LoginScreen extends AppCompatActivity {
 
         final String[] UserType = {"ngo"};
 
-        SignUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://safesync.onrender.com/register"));
-                startActivity(intent);
-            }
+        SignUP.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://safesync.onrender.com/register"));
+            startActivity(intent);
         });
 
         NGO_B.setAlpha(1f);
 
-        NGO_B.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        NGO_B.setOnClickListener(v -> {
 
-                spinner.setVisibility(View.GONE);
-                NGO_email_EDT.setVisibility(View.VISIBLE);
-                UserType[0] = "ngo";
-                NGO_B.setAlpha(1f);
-                Branch_B.setAlpha(0.6f);
-                Branch_layout.setVisibility(View.GONE);
-            }
+            spinner.setVisibility(View.GONE);
+            NGO_email_EDT.setVisibility(View.VISIBLE);
+            UserType[0] = "ngo";
+            NGO_B.setAlpha(1f);
+            Branch_B.setAlpha(0.6f);
+            Branch_layout.setVisibility(View.GONE);
+            NGO_email_EDT.setEnabled(true);
+
+            NGO_email_EDT.setText("");
+            NGO_Email_arr.clear();
+            NGO_Name_arr.clear();
+
         });
 
-        Branch_B.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserType[0] = "branch";
-                Branch_B.setAlpha(1f);
-                NGO_B.setAlpha(0.6f);
+        Branch_B.setOnClickListener(v -> {
+            UserType[0] = "branch";
+            Branch_B.setAlpha(1f);
+            NGO_B.setAlpha(0.6f);
 
-                NGO_email_EDT.setEnabled(false);
-                Branch_layout.setVisibility(View.VISIBLE);
+            NGO_email_EDT.setEnabled(false);
+            Branch_layout.setVisibility(View.VISIBLE);
 
-                PlodingView.setVisibility(View.VISIBLE);
-                LoadingBlur.setVisibility(View.VISIBLE);
+            PlodingView.setVisibility(View.VISIBLE);
+            LoadingBlur.setVisibility(View.VISIBLE);
 
 
-                NGO_Email_arr.clear();
-                NGO_Name_arr.clear();
+            NGO_Email_arr.clear();
+            NGO_Name_arr.clear();
 
-                new Get_Ngo_List().execute();
-            }
-
+            new Get_Ngo_List().execute();
         });
 
 
@@ -253,75 +238,80 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        Login_Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkConnection()) {
-                    if (UserType[0].equals("ngo")) {
-                        if (!EmailValidation(NGO_email_EDT.getText().toString())) {
-                            NGO_email_EDT.setError("Please Enter NGO's Email address");
-                            Toast.makeText(LoginScreen.this, "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
-                        } else if (!passwordValidation(password_EDT.getText().toString())) {
-                            password_EDT.setError("Please Enter Password");
-                            Toast.makeText(LoginScreen.this, "Enter Valid Password", Toast.LENGTH_SHORT).show();
+        Login_Btn.setOnClickListener(v -> {
+            if (checkConnection()) {
+                if (UserType[0].equals("ngo")) {
+                    if (!EmailValidation(NGO_email_EDT.getText().toString())) {
+                        NGO_email_EDT.setError("Please Enter NGO's Email address");
+                        Toast.makeText(LoginScreen.this, "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
+                    } else if (!passwordValidation(password_EDT.getText().toString())) {
+                        password_EDT.setError("Please Enter Password");
+                        Toast.makeText(LoginScreen.this, "Enter Valid Password", Toast.LENGTH_SHORT).show();
 
-                        } else {
-                            PlodingView.setVisibility(View.VISIBLE);
-                            LoadingBlur.setVisibility(View.VISIBLE);
+                    } else {
+                        PlodingView.setVisibility(View.VISIBLE);
+                        LoadingBlur.setVisibility(View.VISIBLE);
 
-                            Login_Btn.setEnabled(false);
+                        Login_Btn.setEnabled(false);
 
 
-                            JSONObject postData = new JSONObject();
-                            try {
-                                postData.put("email", NGO_email_EDT.getText().toString());
-                                postData.put("password", password_EDT.getText().toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            new NGO_Login(String.valueOf(postData),NGO_email_EDT.getText().toString()).execute();
-                            Log.d("SNimesh","Request for NGO Login...");
+                        JSONObject postData = new JSONObject();
+                        try {
+                            postData.put("email", NGO_email_EDT.getText().toString());
+                            postData.put("password", password_EDT.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } else if (UserType[0].equals("branch")) {
-                        if (!EmailValidation(NGO_email_EDT.getText().toString())) {
-                            NGO_email_EDT.setError("Please Enter NGO's Email address");
-                            Toast.makeText(LoginScreen.this, "Enter Valid Email Address in NGO", Toast.LENGTH_SHORT).show();
-                        } else if (!EmailValidation(Branch_email_EDT.getText().toString())) {
-                            Branch_email_EDT.setError("Please Enter Branch's Email address");
-                            Toast.makeText(LoginScreen.this, "Enter Valid Email Address in Branch", Toast.LENGTH_SHORT).show();
-                        } else if (!passwordValidation(password_EDT.getText().toString())) {
-                            password_EDT.setError("Please enter Password");
-                            Toast.makeText(LoginScreen.this, "Enter Valid Password", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            PlodingView.setVisibility(View.VISIBLE);
-                            LoadingBlur.setVisibility(View.VISIBLE);
-                            Login_Btn.setEnabled(false);
-
-                            JSONObject postData = new JSONObject();
-                            try {
-                                postData.put("nEmail", NGO_email_EDT.getText().toString());
-                                postData.put("bEmail", Branch_email_EDT.getText().toString());
-                                postData.put("password", password_EDT.getText().toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            new Branch_Login(String.valueOf(postData)).execute();
-                            Log.d("SNimesh","Request for Branch Login...");
-                        }
+                        new NGO_Login(String.valueOf(postData),NGO_email_EDT.getText().toString()).execute();
+                        Log.d("SNimesh","Request for NGO Login...");
                     }
+                } else if (UserType[0].equals("branch")) {
+                    if (!EmailValidation(NGO_email_EDT.getText().toString())) {
+                        NGO_email_EDT.setError("Please Enter NGO's Email address");
+                        Toast.makeText(LoginScreen.this, "Enter Valid Email Address in NGO", Toast.LENGTH_SHORT).show();
+                    } else if (!EmailValidation(Branch_email_EDT.getText().toString())) {
+                        Branch_email_EDT.setError("Please Enter Branch's Email address");
+                        Toast.makeText(LoginScreen.this, "Enter Valid Email Address in Branch", Toast.LENGTH_SHORT).show();
+                    } else if (!passwordValidation(password_EDT.getText().toString())) {
+                        password_EDT.setError("Please enter Password");
+                        Toast.makeText(LoginScreen.this, "Enter Valid Password", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    Toast.makeText(LoginScreen.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                    } else {
+                        PlodingView.setVisibility(View.VISIBLE);
+                        LoadingBlur.setVisibility(View.VISIBLE);
+                        Login_Btn.setEnabled(false);
+
+                        JSONObject postData = new JSONObject();
+                        try {
+                            postData.put("nEmail", NGO_email_EDT.getText().toString());
+                            postData.put("bEmail", Branch_email_EDT.getText().toString());
+                            postData.put("password", password_EDT.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        new Branch_Login(String.valueOf(postData)).execute();
+                        Log.d("SNimesh","Request for Branch Login...");
+                    }
                 }
+
+            } else {
+                Toast.makeText(LoginScreen.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
             }
         });
 
 
     }
 
-    public class Start_Server extends AsyncTask<Void,Void,Void>{
+    private AlertDialog.Builder getBuilder() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(LoginScreen.this);
+        alert.setCancelable(false);
+        alert.setTitle("No Internet");
+        alert.setMessage("We kindly request you to verify your internet connectivity and attempt to reopen the application.");
+        alert.setPositiveButton("ok", (dialogInterface, i) -> finishAffinity());
+        return alert;
+    }
 
+    public static class Start_Server extends AsyncTask<Void,Void,Void>{
 
         String login_status = "null";
 
@@ -337,7 +327,8 @@ public class LoginScreen extends AppCompatActivity {
                 try {
                     Response response = client.newCall(request).execute();
                     if(response.isSuccessful()){
-                        String jsonData = response.body().string();
+	                    assert response.body() != null;
+	                    String jsonData = response.body().string();
                         JSONObject jsonObject = new JSONObject(jsonData);
 
                         login_status = jsonObject.getString("status");
@@ -384,7 +375,6 @@ public class LoginScreen extends AppCompatActivity {
                     if(login_status.equals("202")){
                         token = jsonObject.getString("token");
                     }
-
                 }
 
             } catch (IOException | JSONException e) {
@@ -403,6 +393,10 @@ public class LoginScreen extends AppCompatActivity {
                     PlodingView.setVisibility(View.GONE);
                     LoadingBlur.setVisibility(View.GONE);
                     Login_Btn.setEnabled(true);
+                    if(token.equals("null")){
+                        Toast.makeText(LoginScreen.this, "Wrong credentials", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     switch (login_status) {
                         case "202":
                             PlodingView.setVisibility(View.GONE);
@@ -471,6 +465,7 @@ public class LoginScreen extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(jsonData);
 
                     login_status = jsonObject.getString("status");
+
                     if(login_status.equals("202")){
                         token = jsonObject.getString("token");
                     }
@@ -486,43 +481,46 @@ public class LoginScreen extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            LoginScreen.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PlodingView.setVisibility(View.GONE);
-                    LoadingBlur.setVisibility(View.GONE);
-                    Login_Btn.setEnabled(true);
-                    switch (login_status) {
-                        case "202":
-                            SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("token", token);
-                            editor.putString("user_type", "branch");
-                            editor.putString("NGO_Email", NGO_email_EDT.getText().toString());
-                            editor.putString("Branch_Email", Branch_email_EDT.getText().toString());
-                            editor.apply();
+            Log.d("ENimesh",token);
 
-                            Toast.makeText(LoginScreen.this, "Login successfully", Toast.LENGTH_SHORT).show();
-                            Intent gotoHome = new Intent(LoginScreen.this,MainActivity2.class);
-                            startActivity(gotoHome);
-                            break;
-                        case "406":
-                            Toast.makeText(LoginScreen.this, "ERROR 406:email or password is missing or not reached server", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "417":
-                            Toast.makeText(LoginScreen.this, "Incorrect email or password", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "401":
-                            Toast.makeText(LoginScreen.this, "Otp verification pending", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "402":
-                            Toast.makeText(LoginScreen.this, "Authorization Pending", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "500":
-                            Toast.makeText(LoginScreen.this, "Internal server error", Toast.LENGTH_SHORT).show();
-                            break;
+            LoginScreen.this.runOnUiThread(() -> {
+                PlodingView.setVisibility(View.GONE);
+                LoadingBlur.setVisibility(View.GONE);
+                Login_Btn.setEnabled(true);
+                if(token.equals("null")){
+                    Toast.makeText(LoginScreen.this, "Wrong credentials", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                switch (login_status) {
+                    case "202":
+                        SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("token", token);
+                        editor.putString("user_type", "branch");
+                        editor.putString("NGO_Email", NGO_email_EDT.getText().toString());
+                        editor.putString("Branch_Email", Branch_email_EDT.getText().toString());
+                        editor.apply();
 
-                    }
+                        Toast.makeText(LoginScreen.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                        Intent gotoHome = new Intent(LoginScreen.this,MainActivity2.class);
+                        startActivity(gotoHome);
+                        break;
+                    case "406":
+                        Toast.makeText(LoginScreen.this, "ERROR 406:email or password is missing or not reached server", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "417":
+                        Toast.makeText(LoginScreen.this, "Incorrect email or password", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "401":
+                        Toast.makeText(LoginScreen.this, "Otp verification pending", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "402":
+                        Toast.makeText(LoginScreen.this, "Authorization Pending", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "500":
+                        Toast.makeText(LoginScreen.this, "Internal server error", Toast.LENGTH_SHORT).show();
+                        break;
+
                 }
             });
 

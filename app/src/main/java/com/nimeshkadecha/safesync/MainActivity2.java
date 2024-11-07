@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -686,27 +687,32 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Check if the fragment is the one you want to handle back press for
         if (currentDestinationId == R.id.nav_home) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
-            alert.setTitle("Exit App");
-            alert.setMessage("Confirm Exit");
-            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finishAffinity();
-                }
-            });
-            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
+            AlertDialog.Builder alert = getBuilder();
 
             alert.show();
         } else {
             // If not the desired fragment, let the system handle the back press
             super.onBackPressed();
         }
+    }
+
+    private AlertDialog.Builder getBuilder() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
+        alert.setTitle("Exit App");
+        alert.setMessage("Confirm Exit");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishAffinity();
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        return alert;
     }
 
     public class get_Branch_Details_A extends AsyncTask<Void, Void, Void> {

@@ -268,6 +268,14 @@
                             android:layout_height="wrap_content"
                             android:maxLength="400"
                             tools:ignore="TextContrastCheck" />
+
+                        <LinearLayout
+                            android:id="@+id/LoadingBlur"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.3"
+                            android:background="#000000"
+                            android:orientation="vertical"></LinearLayout>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -396,18 +404,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <LinearLayout
-        android:id="@+id/LoadingBlur"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.3"
-        android:background="#000000"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-    </LinearLayout>
 
 
     <ProgressBar
